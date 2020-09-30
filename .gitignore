@@ -1,0 +1,7 @@
+*.elc
+*~
+*-autoloads.el
+
+/.eldev/
+/Eldev-local
+/dist/
