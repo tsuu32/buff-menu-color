@@ -2,6 +2,12 @@
 
 This package colorize GNU Emacs's `Buffer-menu-mode` buffers.
 
+## Install
+Install with quelpa using the follow code:
+```elisp
+(quelpa '(buff-menu-color :fetcher github :repo "tsuu32/buff-menu-color"))
+```
+
 ## Usage
 To use this package, add following code to your init file:
 ```elisp
