@@ -3,7 +3,7 @@
 ;; Copyright (C) 2020 by Masahiro Nakamura
 
 ;; Author: Masahiro Nakamura <tsuucat@icloud.com>
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; URL: https://github.com/tsuu32/buff-menu-color
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: convenience
@@ -116,7 +116,7 @@
       (when (derived-mode-p 'Buffer-menu-mode)
         (font-lock-refresh-defaults)))))
 
-(defun buff-menu-color--advice-Buffer-menu--pretty-name (name)
+(defun buff-menu-color--Buffer-menu--pretty-name (name)
   (propertize name 'mouse-face 'highlight))
 
 (defun buff-menu-color--set-font-lock-defaults ()
@@ -127,16 +127,18 @@
 (define-minor-mode buff-menu-color-mode
   "Toggle Buffer Menu color mode on or off.
 Turn Buffer Menu color mode on if ARG is positive, off otherwise.
-Turning on Buffer Menu color mode colorize `buffer-menu', `list-buffer'
-and `electric-buffer-list' buffer."
+Turning on Buffer Menu color mode colorize `buffer-menu', `list-buffers'
+and `electric-buffer-list' buffers."
   :global t
   (if buff-menu-color-mode
+      ;; Enable
       (progn
         (advice-add 'Buffer-menu--pretty-name :override
-                    #'buff-menu-color--advice-Buffer-menu--pretty-name)
+                    #'buff-menu-color--Buffer-menu--pretty-name)
         (add-hook 'Buffer-menu-mode-hook #'buff-menu-color--set-font-lock-defaults))
+    ;; Disable
     (advice-remove 'Buffer-menu--pretty-name
-                   #'buff-menu-color--advice-Buffer-menu--pretty-name)
+                   #'buff-menu-color--Buffer-menu--pretty-name)
     (remove-hook 'Buffer-menu-mode-hook #'buff-menu-color--set-font-lock-defaults)))
 
 (provide 'buff-menu-color)
