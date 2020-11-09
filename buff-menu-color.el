@@ -99,18 +99,22 @@
      (0 buff-menu-color-scratch-face))
     ("^....\\(\\*.*\\)\s+\\([0-9]+\\).*"
      (0 buff-menu-color-nonfile-buffer-face)))
-  "Default font lock expressions to highlight in `Buffer-menu-mode' buffers."
+  "Font lock keywords to highlight `Buffer-menu-mode' buffers."
+  ;; FIXME: improve value-type.
   :type '(repeat
           (choice (regexp :tag "matcher")
                   (cons :tag "(matcher . facename)" regexp symbol)
                   (cons :tag "(matcher highlight ...)" regexp sexp)))
-  :set (lambda (sym val)
-         (set-default sym val)
-         (dolist (b (buffer-list))
-           (with-current-buffer b
-             (when (derived-mode-p 'Buffer-menu-mode)
-               (font-lock-refresh-defaults))))))
+  :initialize #'custom-initialize-default
+  :set #'buff-menu-color-font-lock-keywords--setter)
 
+(defun buff-menu-color-font-lock-keywords--setter (sym val)
+  (set-default sym val)
+  ;; Refresh Buffer Menu buffers' font lock.
+  (dolist (b (buffer-list))
+    (with-current-buffer b
+      (when (derived-mode-p 'Buffer-menu-mode)
+        (font-lock-refresh-defaults)))))
 
 (defun buff-menu-color--advice-Buffer-menu--pretty-name (name)
   (propertize name 'mouse-face 'highlight))
